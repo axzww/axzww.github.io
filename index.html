@@ -701,7 +701,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-19 16:18:29" itemprop="dateModified" datetime="2021-06-19T16:18:29+08:00">2021-06-19</time>
+                <time title="修改时间：2021-06-21 08:48:23" itemprop="dateModified" datetime="2021-06-21T08:48:23+08:00">2021-06-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -724,39 +724,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-
-
-
-<blockquote>
-<p>远程连接数据库并打印 -f DBMS信息 –banner版本信息</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -d &quot;mysql://root:root@172.16.11.41:3306/test&quot; -f --banner</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>sqlmap直接对单一URL探测，参数使用-u或–url，现在查询的是数据库版本信息</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">URL格式：http(s)://targeturl目标[:port]/[...]</span><br><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-1/index.php?id=1&quot; --banner</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>-m 从多行文本文件中读取多个目标，对多个目标进行探测类似-u</p>
-</blockquote>
-<blockquote>
-<p>sqlmap通过-g自动利用Google获取指定Google hack的目标，利用交互向导模式进行sql注入探测</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -g &quot;inurl:.php?id=1&quot;</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>sqlmap会自动在探测过程中使用适当的HTTP请求方法，但有些方法不会自动使用如PUT，所以需要强制指定使用 –method=PUT</p>
-</blockquote>
-<blockquote>
-<p>sqlmap 默认使用的HTTP请求为GET，如上指定为POST或者隐式地将其改为POST如：</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php?id=1&quot; --data=&quot;uname=admin&amp;passwd=admin&amp;submit=Submit&quot; -f --banner --users --dbs</span><br></pre></td></tr></table></figure>
-
-
+          <h2 id="SqlMap日常使用相关"><a href="#SqlMap日常使用相关" class="headerlink" title="SqlMap日常使用相关"></a>SqlMap日常使用相关</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/06/18/SqlMap/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -847,7 +823,7 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
